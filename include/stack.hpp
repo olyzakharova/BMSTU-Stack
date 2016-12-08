@@ -68,6 +68,24 @@ public:
         --count_;
         return elem;
     }
+    
+    bool operator==(const stack<T>& rhs)
+    {
+        if(count_ != rhs.count_)
+        {
+            return false;
+        }
+
+        for(std::size_t i = 0; i < count_; ++i)
+        {
+            if(array_[i] != rhs.array_[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 private:
     T* array_;
