@@ -8,9 +8,7 @@ SCENARIO("if stack is empty (for pop-test")
         stack<int> stack1;
        
         WHEN("")
-        {
-            stack1.pop();
-           
+        {               
             THEN("count must be 0")
             {
                 REQUIRE(stack1.count() == 0);
