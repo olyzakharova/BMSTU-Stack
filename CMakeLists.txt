@@ -10,11 +10,5 @@ option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(BUILD_TESTS "Build tests for stack" ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
-
-if(BUILD_TESTS)
-    enable_testing()
-    file(GLOB ${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
-    add_executable(Tests ${${PROJECT_NAME}_TEST_SOURCES} tests/main.cpp tests/push.cpp tests/pop.cpp tests/count.cpp)
-    #target_link_libraries(Tests ${PROJECT_NAME} ${DEPENDS_LIBRARIES})
-    add_test(NAME Tests COMMAND check "-s" "-r" "compact" "--use-colour" "yes")
-endif()
+add_executable(Tests ${TEST_SOURCES} tests/main.cpp tests/push.cpp tests/pop.cpp tests/count.cpp)
+   
