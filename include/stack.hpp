@@ -1,6 +1,3 @@
-
-//#pragma once
-
 #include <new>
 #include <exception>
 #include <stdexcept>
