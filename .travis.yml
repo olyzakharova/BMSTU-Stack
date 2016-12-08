@@ -1,15 +1,19 @@
-language: cpp
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    - llvm-toolchain-precise-3.6
-    packages:
-    - clang-3.6
-compiler:
-  - clang-3.6
+language: generic
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      env: COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
+      addons:
+        apt:
+          packages:
+            - clang
+            - cmake
+          sources: &sources
+            - llvm-toolchain-precise
+            - ubuntu-toolchain-r-test
 script:
   - mkdir build
   - cd build
-  - cmake .. && make  
+  - cmake .. && make
   - ./Tests
