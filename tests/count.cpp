@@ -10,7 +10,7 @@ SCENARIO ("if stack is empty")
        {  
            THEN("")
            {
-                REQUIRE(stackf.count() = 0);
+                REQUIRE(stackf.count() == 0);
            }
        }
    }
