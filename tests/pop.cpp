@@ -24,17 +24,17 @@ SCENARIO("if stack isn't empty v1")
     GIVEN("stack")
     {
         stack<int> stack1;
-        st.push_back(1);
-        st.push_back(2);
-        st.push_back(3);
-        st.push_back(4);
-        st.push_back(5);
+        st.push(1);
+        st.push(2);
+        st.push(3);
+        st.push(4);
+        st.push(5);
 
         stack<int> stack2;
-        stack2.push_back(1);
-        stack2.push_back(2);
-        stack2.push_back(3);
-        stack2.push_back(4);
+        stack2.push(1);
+        stack2.push(2);
+        stack2.push(3);
+        stack2.push(4);
         
        WHEN("try to pop")
         {
