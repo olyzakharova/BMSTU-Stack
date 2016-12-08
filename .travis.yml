@@ -7,7 +7,7 @@ matrix:
       addons:
         apt:
           packages:
-            - clang
+            - g++-5
             - cmake
           sources: &sources
             - llvm-toolchain-precise
