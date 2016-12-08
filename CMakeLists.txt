@@ -1,12 +1,20 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.7)
 
-project(stack)
+project(Stack)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(TESTS_SOURCE tests/count.cpp tests/main.cpp tests/pop.cpp tests/push.cpp tests/catch.hpp )
-set(SOURCE_FILES include/stack.hpp)
 
-install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include  DESTINATION include)
+option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
+option(BUILD_TESTS "Build tests for stack" ON)
 
-include_directories(include)
-add_executable(Tests ${TESTS_SOURCE} tests/count.cpp tests/main.cpp tests/pop.cpp tests/push.cpp)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+
+if(BUILD_TESTS)
+    enable_testing()
+    file(GLOB ${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
+    add_executable(Tests ${${PROJECT_NAME}_TEST_SOURCES} tests/main.cpp tests/push.cpp tests/pop.cpp tests/count.cpp)
+    target_link_libraries(Tests ${PROJECT_NAME} ${DEPENDS_LIBRARIES})
+    add_test(NAME Tests COMMAND check "-s" "-r" "compact" "--use-colour" "yes")
+endif()
