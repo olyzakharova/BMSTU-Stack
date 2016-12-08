@@ -4,4 +4,4 @@ project(stack)
 
 include_directories(include)
 
-add_executable(simple_test tests/count.cpp)
+add_executable(simple_test tests/count.cpp tests/main.cpp tests/pop.cpp tests/push.cpp)
