@@ -3,6 +3,7 @@
 
 #include <new>
 #include <exception>
+#include <stdexcept>
 
 class empty_stack: public std::exception
 {
