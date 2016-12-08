@@ -30,7 +30,7 @@ SCENARIO("if stack isn't empty (but isn't full)")
             stack1.push(4);
             THEN("")
             {
-                REQUIRE(stack.count() == 2);
+                REQUIRE(stack1.count() == 2);
             }
         }
     }
