@@ -9,7 +9,7 @@ SCENARIO ("if stack is empty")
      stack1.push(1);
      stack1.push(2);
      stack1.push(3);
-     auto count = stack1.count();
+     size_t count = stack1.count();
       
      WHEN("ok")
        {  
