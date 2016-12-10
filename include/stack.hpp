@@ -26,12 +26,12 @@ public:
         operator delete[](array_);
     }
 
-    std::size_t count() const
+    std::size_t count() const noexcept
     {
         return count_;
     }
 
-    void push(const T& elem)
+    void push(const T& elem) /* strong */
     {
         if(count_ == array_size_)
         {
@@ -57,18 +57,45 @@ public:
         ++count_;
     }
 
-    T pop()
+    auto pop() -> void /* strong */
+    {
+        if(count_ == 0)
+        {
+            throw empty_stack();
+        }
+        
+        --count_;
+        
+    }
+    
+    const T& top() /* strong */
     {
         if(count_ == 0)
         {
             throw empty_stack();
         }
 
-        T elem = array_[count_ - 1];
-        --count_;
-        return elem;
+       return array_[count_-1];
     }
-    
+
+    auto empty() const noexcept -> bool
+    {
+        if (count_ == 0)
+        {
+
+             return true;
+
+        }
+
+        else
+        {
+            return false;
+        }
+
+
+    }
+
+
     bool operator==(const stack<T>& rhs)
     {
         if(count_ != rhs.count_)
