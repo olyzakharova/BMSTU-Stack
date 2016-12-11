@@ -23,7 +23,7 @@ public:
 
     ~stack()
     {
-        operator delete[](array_);
+        delete_array(array_, count_);
     }
 
     std::size_t count() const noexcept
@@ -44,11 +44,12 @@ public:
                 }
                 catch(...)
                 {
-                    operator delete[](new_array);
+                    delete_array(array_, count_);
                     throw;
                 }
             }
-            operator delete[](array_);
+
+            delete_array(array_, count_);
             array_ = new_array;
             array_size_ *= 2;
         }
@@ -63,11 +64,11 @@ public:
         {
             throw empty_stack();
         }
-        
+
         --count_;
-        
+
     }
-    
+
     const T& top() /* strong */
     {
         if(count_ == 0)
@@ -120,4 +121,13 @@ private:
     std::size_t count_;
 
     static const std::size_t start_size_ = 16;
+
+    void delete_array(T* array, std::size_t count)
+      {
+          for(std::size_t i = 0; i < count; ++i)
+          {
+              array[i].~T();
+          }
+          operator delete[](array);
+      }
 };
