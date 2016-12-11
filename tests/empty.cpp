@@ -36,7 +36,7 @@ SCENARIO("if stack isn't empty (must return false)")
             THEN("return false")
             {
             
-                REQUIRE(stack1.empty());
+                REQUIRE_FALSE(stack1.empty());
                 
             }
             
