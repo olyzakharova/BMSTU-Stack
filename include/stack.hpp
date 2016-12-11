@@ -16,7 +16,7 @@ class stack
 {
 public:
     stack():
-        array_(array_ = static_cast<T*>(operator new[](start_size_ * sizeof(T)))),
+        array_(static_cast<T*>(operator new[](start_size_ * sizeof(T)))),
         array_size_(start_size_),
         count_(0)
     {}
@@ -44,7 +44,7 @@ public:
                 }
                 catch(...)
                 {
-                    delete_array(array_, count_);
+                    delete_array(new_array, i);
                     throw;
                 }
             }
@@ -65,6 +65,7 @@ public:
             throw empty_stack();
         }
 
+        array_[count_ - 1].~T();
         --count_;
 
     }
