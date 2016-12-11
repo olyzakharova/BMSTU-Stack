@@ -1,6 +1,3 @@
-include <slack.hpp>
-include "catch.hpp"
-
 #include "catch.hpp"
 #include <stack.hpp>
 
