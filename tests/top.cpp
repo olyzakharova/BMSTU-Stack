@@ -1,4 +1,4 @@
-#include <slack.hpp>
+#include <stack.hpp>
 #include "catch.hpp"
 
 SCENARIO("if stack is empty (top-test)")
