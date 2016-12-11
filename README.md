@@ -6,7 +6,7 @@ Project 3
 
 
 Stage 1:
- -class stack
+  class stack
 
 Stage 2:
 - basic
@@ -16,7 +16,7 @@ Stage 2:
 - added empty()
 
 Stage 3:
--added class allocator (base for class stack)
+  added class allocator (base for class stack)
 
 Stage 4:
--added class allocator (inside class stack)
+  added class allocator (inside class stack)
