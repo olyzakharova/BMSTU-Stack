@@ -11,7 +11,7 @@ SCENARIO("if stack is empty (top-test)")
         {
             THEN("")
             {
-                REQUIRE(stack1.top());
+                REQUIRE(stack1.count() == 0);
             }
             
         }
