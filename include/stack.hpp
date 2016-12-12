@@ -1,6 +1,6 @@
-#include <new>
 #include <exception>
-#include <stdexcept>
+
+#include "allocator.hpp"
 
 class empty_stack: public std::exception
 {
@@ -12,123 +12,71 @@ public:
 };
 
 template <typename T>
-class stack
+class stack: public allocator<T>
 {
 public:
     stack():
-        array_(static_cast<T*>(operator new[](start_size_ * sizeof(T)))),
-        array_size_(start_size_),
-        count_(0)
+        allocator<T>(start_size_)
     {}
 
-    ~stack()
-    {
-        delete_array(array_, count_);
-    }
-
+    
     std::size_t count() const noexcept
     {
-        return count_;
+        return allocator<T>::count_;
     }
 
     void push(const T& elem) /* strong */
     {
-        if(count_ == array_size_)
-        {
-            T* new_array = static_cast<T*>(operator new[](array_size_ * sizeof(T) * 2));
-            for(std::size_t i = 0; i < count_; ++i)
-            {
-                try
-                {
-                    new(&new_array[i]) T(array_[i]);
-                }
-                catch(...)
-                {
-                    delete_array(new_array, i);
-                    throw;
-                }
-            }
-
-            delete_array(array_, count_);
-            array_ = new_array;
-            array_size_ *= 2;
-        }
-
-        new(&array_[count_]) T(elem);
-        ++count_;
+        allocator<T>::allocate();
+        new(&allocator<T>::ptr_[allocator<T>::count_]) T(elem);
+        ++allocator<T>::count_;
     }
 
-    auto pop() -> void /* strong */
+    void pop() /* strong */
     {
-        if(count_ == 0)
+        if(allocator<T>::count_ == 0)
         {
             throw empty_stack();
         }
 
-        array_[count_ - 1].~T();
-        --count_;
-
+        allocator<T>::ptr_[allocator<T>::count_ - 1].~T();
+        --allocator<T>::count_;
     }
 
-    const T& top() /* strong */
+    T& top() /* strong */
     {
-        if(count_ == 0)
+        if(allocator<T>::count_ == 0)
         {
             throw empty_stack();
         }
 
-       return array_[count_-1];
+        return allocator<T>::ptr_[allocator<T>::count_ - 1];
     }
 
     auto empty() const noexcept -> bool
     {
-        if (count_ == 0)
-        {
-
-             return true;
-
-        }
-
-        else
-        {
-            return false;
-        }
-
-
+        return (allocator<T>::count_ == 0);
     }
 
-
+    
     bool operator==(const stack<T>& rhs)
-    {
-        if(count_ != rhs.count_)
         {
-            return false;
-        }
-
-        for(std::size_t i = 0; i < count_; ++i)
-        {
-            if(array_[i] != rhs.array_[i])
+            if(allocator<T>::count_ != rhs.count_)
             {
                 return false;
             }
+    
+            for(std::size_t i = 0; i < allocator<T>::count_; ++i)
+            {
+                if(allocator<T>::ptr_[i] != rhs.ptr_[i])
+                {
+                    return false;
+                }
+            }
+    
+            return true;
         }
-
-        return true;
-    }
-
+    
 private:
-    T* array_;
-    std::size_t array_size_;
-    std::size_t count_;
-
     static const std::size_t start_size_ = 16;
-
-    void delete_array(T* array, std::size_t count)
-      {
-          for(std::size_t i = 0; i < count; ++i)
-          {
-              array[i].~T();
-          }
-          operator delete[](array);
-      }
 };
