@@ -12,71 +12,63 @@ public:
 };
 
 template <typename T>
-class stack: public allocator<T>
+class stack
 {
 public:
     stack():
-        allocator<T>(start_size_)
+        allocator_(start_size_)
     {}
 
-    
+    ~stack() {}
+
     std::size_t count() const noexcept
     {
-        return allocator<T>::count_;
+        return allocator_.count();
     }
 
-    void push(const T& elem) /* strong */
+    void push(const T& elem)
     {
-        allocator<T>::allocate();
-        new(&allocator<T>::ptr_[allocator<T>::count_]) T(elem);
-        ++allocator<T>::count_;
+        if(allocator_.full())
+        {
+            allocator_.resize();
+        }
+        allocator_.construct(allocator_.get() + allocator_.count(), elem);
+        allocator_.increment_count();
     }
 
-    void pop() /* strong */
+    void pop()
     {
-        if(allocator<T>::count_ == 0)
+        if(allocator_.empty())
         {
             throw empty_stack();
         }
 
-        allocator<T>::ptr_[allocator<T>::count_ - 1].~T();
-        --allocator<T>::count_;
+        allocator_.destroy(allocator_.get() + allocator_.count() - 1);
+        allocator_.decrement_count();
     }
 
-    T& top() /* strong */
+    T& top()
     {
-        if(allocator<T>::count_ == 0)
+        if(allocator_.empty())
         {
             throw empty_stack();
         }
 
-        return allocator<T>::ptr_[allocator<T>::count_ - 1];
+        return *(allocator_.get() + allocator_.count() - 1);
     }
 
-    auto empty() const noexcept -> bool
+    bool empty() const noexcept
     {
-        return (allocator<T>::count_ == 0);
+        return allocator_.empty();
     }
 
-    
     bool operator==(const stack<T>& rhs)
-        {
-            if(allocator<T>::count_ != rhs.count_)
-            {
-                return false;
-            }
-    
-            for(std::size_t i = 0; i < allocator<T>::count_; ++i)
-            {
-                if(allocator<T>::ptr_[i] != rhs.ptr_[i])
-                {
-                    return false;
-                }
-            }
-    
-            return true;
-        }
-    
+    {
+        return (allocator_ == rhs.allocator_);
+    }
+
 private:
+    allocator<T> allocator_;
+
     static const std::size_t start_size_ = 16;
 };
